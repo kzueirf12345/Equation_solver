@@ -1,3 +1,7 @@
-TODO file for exuation solver
+## Pending
+ - add textbox for input equations
+ - singly linked-list
 
-[ ] add text something
+## In work
+
+## Done

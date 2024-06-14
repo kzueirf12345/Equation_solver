@@ -39,8 +39,6 @@ void* scp(void* ptr) {
     return ptr;
 }
 
-// SDL_Texture* get_
-
 void render_game(SDL_Renderer* renderer)
 {
     SDL_Color color = {10, 10, 10, 255};
