@@ -44,8 +44,8 @@ void* scp(void* ptr) {
 void render_game(SDL_Renderer* renderer)
 {
     SDL_Color color = {10, 10, 10, 255};
-    SDL_Surface* surface = scp(SDL_CreateRGBSurface(0, 100, 100, 8, 0xFF000000, 0x00FF0000,
-                                                    0x0000FF00, 0x000000FF));
+    SDL_Surface* surface = scp(SDL_CreateRGBSurface(0, 100, 100, 8, 0, 0,
+                                                    0, 0));
     SDL_Texture* texture = scp(SDL_CreateTextureFromSurface(renderer, surface));
     SDL_FreeSurface(surface);
     SDL_Rect rect = {100,  100, 100, 100};
