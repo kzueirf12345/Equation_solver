@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "database.h"
+
 #define true 1
 #define false 0
 
