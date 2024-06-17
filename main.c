@@ -1,11 +1,10 @@
 #include <SDL2/SDL.h>
-
 #include <stdbool.h>
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-#include "database.h"
+#include "list.h"
 
 #define true 1
 #define false 0
@@ -15,7 +14,7 @@
 #define BOARD_WIDTH 100
 #define BOARD_HEIGHT 100
 
-typedef struct{
+typedef struct {
     Uint8 r;
     Uint8 g;
     Uint8 b;
@@ -41,58 +40,55 @@ void* scp(void* ptr) {
     return ptr;
 }
 
-void render_game(SDL_Renderer* renderer)
-{
+void render_game(SDL_Renderer* renderer) {
     SDL_Color color = {10, 10, 10, 255};
-    SDL_Surface* surface = scp(SDL_CreateRGBSurface(0, 100, 100, 8, 0, 0,
-                                                    0, 0));
+    SDL_Surface* surface =
+        scp(SDL_CreateRGBSurface(0, 100, 100, 8, 0, 0, 0, 0));
     SDL_Texture* texture = scp(SDL_CreateTextureFromSurface(renderer, surface));
     SDL_FreeSurface(surface);
-    SDL_Rect rect = {100,  100, 100, 100};
+    SDL_Rect rect = {100, 100, 100, 100};
     SDL_RenderCopy(renderer, texture, NULL, &rect);
     SDL_DestroyTexture(texture);
 }
 
 int main(int argc, char* argv[]) {
-    scc(SDL_Init(SDL_INIT_EVERYTHING));
+    // scc(SDL_Init(SDL_INIT_EVERYTHING));
 
-    SDL_Window* window = scp(SDL_CreateWindow(
-        "Equations solver",
-        SDL_WINDOWPOS_CENTERED, 
-        SDL_WINDOWPOS_CENTERED,
-        SCREEN_WIDTH,
-        SCREEN_HEIGHT,
-        SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN));
+    // SDL_Window* window = scp(SDL_CreateWindow(
+    //     "Equations solver", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    //     SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN));
 
-    SDL_Renderer* renderer = scp(SDL_CreateRenderer(
-        window,
-        -1,
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
+    // SDL_Renderer* renderer = scp(SDL_CreateRenderer(
+    //     window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
 
-    scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
+    // scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
 
-    bool quit = false;
-    while (!quit) {
-        SDL_Event event;
-        if (SDL_PollEvent(&event)) {
-            switch (event.type) {
-            case SDL_QUIT:
-            {
-                quit = true;
-            } break;
-            }
-        }
+    // bool quit = false;
+    // while (!quit) {
+    //     SDL_Event event;
+    //     if (SDL_PollEvent(&event)) {
+    //         switch (event.type) {
+    //             case SDL_QUIT: {
+    //                 quit = true;
+    //             } break;
+    //         }
+    //     }
 
-        scc(SDL_SetRenderDrawColor(renderer, PARSE_COLOR(SCREEN_COLOR)));
-        scc(SDL_RenderClear(renderer));
+    //     scc(SDL_SetRenderDrawColor(renderer, PARSE_COLOR(SCREEN_COLOR)));
+    //     scc(SDL_RenderClear(renderer));
 
-        render_game(renderer);
+    //     render_game(renderer);
 
-        SDL_RenderPresent(renderer);
-    }
+    //     SDL_RenderPresent(renderer);
+    // }
 
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    // SDL_DestroyWindow(window);
+    // SDL_Quit();
+
+    push_back(create_Data(10, 1.5));
+    push_front(create_Data(11, -10));
+    pop_back();
+    pop_front();
 
     return EXIT_SUCCESS;
 }
