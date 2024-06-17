@@ -52,43 +52,38 @@ void render_game(SDL_Renderer* renderer) {
 }
 
 int main(int argc, char* argv[]) {
-    // scc(SDL_Init(SDL_INIT_EVERYTHING));
+    scc(SDL_Init(SDL_INIT_EVERYTHING));
 
-    // SDL_Window* window = scp(SDL_CreateWindow(
-    //     "Equations solver", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-    //     SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN));
+    SDL_Window* window = scp(SDL_CreateWindow(
+        "Equations solver", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN));
 
-    // SDL_Renderer* renderer = scp(SDL_CreateRenderer(
-    //     window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
+    SDL_Renderer* renderer = scp(SDL_CreateRenderer(
+        window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
 
-    // scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
+    scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
 
-    // bool quit = false;
-    // while (!quit) {
-    //     SDL_Event event;
-    //     if (SDL_PollEvent(&event)) {
-    //         switch (event.type) {
-    //             case SDL_QUIT: {
-    //                 quit = true;
-    //             } break;
-    //         }
-    //     }
+    bool quit = false;
+    while (!quit) {
+        SDL_Event event;
+        if (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT: {
+                    quit = true;
+                } break;
+            }
+        }
 
-    //     scc(SDL_SetRenderDrawColor(renderer, PARSE_COLOR(SCREEN_COLOR)));
-    //     scc(SDL_RenderClear(renderer));
+        scc(SDL_SetRenderDrawColor(renderer, PARSE_COLOR(SCREEN_COLOR)));
+        scc(SDL_RenderClear(renderer));
 
-    //     render_game(renderer);
+        render_game(renderer);
 
-    //     SDL_RenderPresent(renderer);
-    // }
+        SDL_RenderPresent(renderer);
+    }
 
-    // SDL_DestroyWindow(window);
-    // SDL_Quit();
-
-    push_back(create_Data(10, 1.5));
-    push_front(create_Data(11, -10));
-    pop_back();
-    pop_front();
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
     return EXIT_SUCCESS;
 }
