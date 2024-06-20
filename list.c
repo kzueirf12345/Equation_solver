@@ -1,26 +1,21 @@
 #include "list.h"
 
-// #define NDEBUG
-
 Node *front = NULL, *back = NULL;
-int list_size = 0;
+size_t list_size = 0;
 
 Data create_Data(int power, float coef) {
-    Data new_data;
-    new_data.power = power;
-    new_data.coef = coef;
-    return new_data;
+    return (Data){power, coef};
 }
 
 Node *create_Node(Data data) {
-    Node *new_node = malloc(sizeof(Node));
+    Node *new_node = (Node *)malloc(sizeof(Node));
     new_node->data = data;
     new_node->next = NULL;
     return new_node;
 }
 
-void push_front(Data value) {
-    Node *new_node = create_Node(value);
+void push_front(Data data) {
+    Node *new_node = create_Node(data);
 
     assert(new_node && "bad alloc");
 
@@ -35,7 +30,7 @@ void push_front(Data value) {
     return;
 }
 
-void pop_front() {
+void pop_front(void) {
     assert(front && "list is empty");
 
     Node *del = front;
@@ -49,8 +44,8 @@ void pop_front() {
     free(del);
 }
 
-void push_back(Data value) {
-    Node *new_node = create_Node(value);
+void push_back(Data data) {
+    Node *new_node = create_Node(data);
 
     assert(new_node && "bad alloc");
 
@@ -65,16 +60,16 @@ void push_back(Data value) {
     return;
 }
 
-void pop_back() {
-    assert(back && "list is empty");
+void pop_back(void) {
+    assert(front && "list is empty");
 
-    Node *del = NULL;
+    Node *del = front;
     if (list_size == 1) {
         front = NULL;
         back = NULL;
     } else {
         Node *cur = front;
-        while (cur->next) {
+        while (cur->next->next) {
             cur = cur->next;
         }
 

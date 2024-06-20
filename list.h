@@ -5,20 +5,20 @@
 #include <stdio.h>
 #include <assert.h>
 
-typedef struct {
+typedef struct Data {
     int power;
     float coef;
 } Data;
 
 Data create_Data(int power, float coef);
 
-typedef struct {
+typedef struct Node {
     Data data;
     struct Node* next;
 } Node;
 
 Node* create_Node(Data value);
 void push_front(Data value);
-void pop_front();
+void pop_front(void);
 void push_back(Data value);
-void pop_back();
+void pop_back(void);
