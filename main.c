@@ -1,12 +1,8 @@
-#include <SDL2/SDL.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <malloc.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "list.h"
 #include "my_string.h"
+#include "errors.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -27,49 +23,20 @@ const Color TEXTBOX_COLOR = {100, 0, 0, 255};
 
 string text = {NULL, 0, 0};
 
-int scc(int code)
-{
-    if (code < 0)
-    {
-        printf("SDL error: %s\n", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
-    return code;
-}
-void *scp(void *ptr)
-{
-    if (ptr == NULL)
-    {
-        printf("SDL error: %s\n", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
-    return ptr;
-}
-
-void render_game(SDL_Renderer *renderer)
-{
-    SDL_Color color = {10, 10, 10, 255};
-    SDL_Surface *surface =
-        scp(SDL_CreateRGBSurface(0, 100, 100, 8, 0, 0, 0, 0));
-    SDL_Texture *texture = scp(SDL_CreateTextureFromSurface(renderer, surface));
-    SDL_FreeSurface(surface);
-    SDL_Rect rect = {100, 100, 100, 100};
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
-    SDL_DestroyTexture(texture);
-}
-
 int main(int argc, char *argv[])
 {
-    scc(SDL_Init(SDL_INIT_EVERYTHING));
+    SDL_scc(SDL_Init(SDL_INIT_EVERYTHING));
+    TTF_scc(TTF_Init());
 
-    SDL_Window *window = scp(SDL_CreateWindow(
+    SDL_Window *window = SDL_scp(SDL_CreateWindow(
         "Equations solver", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN));
 
-    SDL_Renderer *renderer = scp(SDL_CreateRenderer(
+    SDL_Renderer *renderer = SDL_scp(SDL_CreateRenderer(
         window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
+    SDL_scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
 
-    scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
+    TTF_Font *font = TTF_scp(TTF_OpenFont("../Montserrat.ttf", 24));
 
     SDL_StartTextInput();
 
@@ -88,27 +55,63 @@ int main(int argc, char *argv[])
             }
             case SDL_TEXTINPUT:
             {
-                string_realloc(&text, strlen(event.text.text));
-                strcat(text.data, event.text.text);
-                // printf("%s\n %d %d\n", text.data, (int)text.size, (int)text.capacity);
+                const char *syms = event.text.text;
+                if (is_good_syms(syms))
+                {
+                    string_realloc(&text, 1);
+                    strcat(text.data, syms);
+                }
+                break;
+            }
+            case SDL_KEYDOWN:
+            {
+                if (event.key.keysym.sym == SDLK_BACKSPACE && text.size)
+                {
+                    text.data[--text.size] = '\0';
+                }
                 break;
             }
             }
         }
+        SDL_Rect textbox_rect = {50, 100, SCREEN_WIDTH - 100, 200};
 
-        scc(SDL_SetRenderDrawColor(renderer, PARSE_COLOR(SCREEN_COLOR)));
-        scc(SDL_RenderClear(renderer));
+        SDL_scc(SDL_SetRenderDrawColor(renderer, PARSE_COLOR(SCREEN_COLOR)));
+        SDL_scc(SDL_RenderClear(renderer));
 
-        render_game(renderer);
+        SDL_Surface *textbox_surface =
+            SDL_scp(SDL_CreateRGBSurface(0, textbox_rect.w, textbox_rect.h, 8, 0, 0, 0, 0));
+        SDL_Texture *textbox_texture = SDL_scp(SDL_CreateTextureFromSurface(renderer, textbox_surface));
+        SDL_RenderCopy(renderer, textbox_texture, NULL, &textbox_rect);
+
+        if (text.size)
+        {
+            SDL_Color color = {100, 100, 100, 255};
+            textbox_surface = TTF_scp(TTF_RenderText_Solid(font, text.data, color));
+            textbox_texture = SDL_scp(SDL_CreateTextureFromSurface(renderer, textbox_surface));
+
+            textbox_rect.x += 10;
+            textbox_rect.y += 20;
+            textbox_rect.w = textbox_surface->w;
+            textbox_rect.h = textbox_surface->h;
+
+            SDL_scc(SDL_RenderCopy(renderer, textbox_texture, NULL, &textbox_rect));
+        }
+
+        SDL_FreeSurface(textbox_surface);
+        SDL_DestroyTexture(textbox_texture);
+        textbox_surface = NULL;
+        textbox_texture = NULL;
 
         SDL_RenderPresent(renderer);
     }
 
     free(text.data);
     SDL_StopTextInput();
-
     SDL_DestroyWindow(window);
+    TTF_CloseFont(font);
+
     SDL_Quit();
+    TTF_Quit();
 
     return EXIT_SUCCESS;
 }
