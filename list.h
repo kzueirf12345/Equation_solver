@@ -1,9 +1,9 @@
 #pragma once
 
-#include <stdlib.h>
+#include <assert.h>
 #include <memory.h>
 #include <stdio.h>
-#include <assert.h>
+#include <stdlib.h>
 
 typedef struct Data {
     int power;
@@ -14,10 +14,10 @@ Data create_Data(int power, float coef);
 
 typedef struct Node {
     Data data;
-    struct Node* next;
+    struct Node *next;
 } Node;
 
-Node* create_Node(Data value);
+Node *create_Node(Data value);
 void push_front(Data value);
 void pop_front(void);
 void push_back(Data value);

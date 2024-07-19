@@ -3,9 +3,7 @@
 Node *front = NULL, *back = NULL;
 size_t list_size = 0;
 
-Data create_Data(int power, float coef) {
-    return (Data){power, coef};
-}
+Data create_Data(int power, float coef) { return (Data){power, coef}; }
 
 Node *create_Node(Data data) {
     Node *new_node = (Node *)malloc(sizeof(Node));
@@ -73,7 +71,7 @@ void pop_back(void) {
             cur = cur->next;
         }
 
-        del = cur->next; 
+        del = cur->next;
         back = cur;
     }
     --list_size;

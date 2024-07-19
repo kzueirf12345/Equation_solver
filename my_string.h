@@ -8,8 +8,7 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-typedef struct string
-{
+typedef struct string {
     char *data;
     size_t capacity;
     size_t size;
