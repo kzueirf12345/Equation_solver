@@ -16,8 +16,7 @@ int main(int argc, char* argv[]) {
         "Equations solver", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
         SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_FOCUS));
 
-    SDL_Renderer* renderer = SDL_scp(
-        SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
+    SDL_Renderer* renderer = SDL_scp(SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED));
     SDL_scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
 
     TTF_Font* font = TTF_scp(TTF_OpenFont("../Montserrat.ttf", 30));
