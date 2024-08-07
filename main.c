@@ -1,89 +1,106 @@
-#include <SDL2/SDL.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "list.h"
+#include "render.h"
 
-#define true 1
-#define false 0
-
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-#define BOARD_WIDTH 100
-#define BOARD_HEIGHT 100
-
-typedef struct {
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-} Color;
-#define PARSE_COLOR(color) color.r, color.g, color.b, color.a
-
-const Color SCREEN_COLOR = {25, 25, 25, 255};
-const Color TEXTBOX_COLOR = {100, 0, 0, 255};
-
-int scc(int code) {
-    if (code < 0) {
-        printf("SDL error: %s\n", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
-    return code;
-}
-void* scp(void* ptr) {
-    if (ptr == NULL) {
-        printf("SDL error: %s\n", SDL_GetError());
-        exit(EXIT_FAILURE);
-    }
-    return ptr;
-}
-
-void render_game(SDL_Renderer* renderer) {
-    SDL_Color color = {10, 10, 10, 255};
-    SDL_Surface* surface =
-        scp(SDL_CreateRGBSurface(0, 100, 100, 8, 0, 0, 0, 0));
-    SDL_Texture* texture = scp(SDL_CreateTextureFromSurface(renderer, surface));
-    SDL_FreeSurface(surface);
-    SDL_Rect rect = {100, 100, 100, 100};
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
-    SDL_DestroyTexture(texture);
+void destroy_global_objects(void) {
+    SDL_FreeSurface(eqin_surface);
+    eqin_surface = NULL;
+    SDL_FreeSurface(eqin_scroll_surface);
+    eqin_scroll_surface = NULL;
 }
 
 int main(int argc, char* argv[]) {
-    scc(SDL_Init(SDL_INIT_EVERYTHING));
+    SDL_scc(SDL_Init(SDL_INIT_EVERYTHING));
+    TTF_scc(TTF_Init());
 
-    SDL_Window* window = scp(SDL_CreateWindow(
-        "Equations solver", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN));
+    SDL_Window* window = SDL_scp(SDL_CreateWindow(
+        "Equations solver", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
+        SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_FOCUS));
 
-    SDL_Renderer* renderer = scp(SDL_CreateRenderer(
-        window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
+    SDL_Renderer* renderer = SDL_scp(
+        SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
+    SDL_scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
 
-    scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
+    TTF_Font* font = TTF_scp(TTF_OpenFont("../Montserrat.ttf", 30));
 
-    bool quit = false;
+    SDL_StartTextInput();
+
+    SDL_bool quit = SDL_FALSE;
     while (!quit) {
         SDL_Event event;
         if (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT: {
-                    quit = true;
-                } break;
+                    quit = SDL_TRUE;
+                    break;
+                }
+                case SDL_TEXTINPUT: {
+                    const char* syms = event.text.text;
+                    if (is_good_syms(syms)) {
+                        string_realloc(&eqin_text, 1);
+                        strcat(eqin_text.data, syms);
+                    }
+                    break;
+                }
+                case SDL_KEYDOWN: {
+                    if (event.key.keysym.sym == SDLK_BACKSPACE && eqin_text.size) {
+                        eqin_text.data[--eqin_text.size] = '\0';
+                    }
+                    break;
+                }
+                case SDL_MOUSEBUTTONDOWN: {
+                    if (eqin_scroll_rect.w) {
+                        SDL_Point cursor_pos;
+                        SDL_Rect rect = {bg_eqin_scroll_rect.x + EQIN_HORIZONTAL_PADDING,
+                                         bg_eqin_scroll_rect.y + EQIN_TOP_PADDING,
+                                         eqin_scroll_rect.w, eqin_scroll_rect.h};
+                        SDL_GetMouseState(&cursor_pos.x, &cursor_pos.y);
+                        if (is_point_in_rect(&cursor_pos, &rect)) {
+                            is_movable_eqin_scroll = SDL_TRUE;
+                            // printf("down\n");
+                        }
+                    }
+                    break;
+                }
+                case SDL_MOUSEBUTTONUP: {
+                    is_movable_eqin_scroll = SDL_FALSE;
+                    // printf("up\n");
+                    break;
+                }
+                case SDL_MOUSEMOTION: {
+                    if (is_movable_eqin_scroll) {
+                        offset_eqin_scroll += event.motion.xrel;
+                        offset_eqin_scroll = MIN(
+                            EQIN_WIDTH - 2 * EQIN_SCROLL_HORIZONTAL_PADDING - eqin_scroll_rect.w,
+                            MAX(0, offset_eqin_scroll));
+                        bg_eqin_scroll_rect.x = EQIN_SCROLL_HORIZONTAL_PADDING + offset_eqin_scroll;
+                    }
+                    break;
+                }
             }
         }
 
-        scc(SDL_SetRenderDrawColor(renderer, PARSE_COLOR(SCREEN_COLOR)));
-        scc(SDL_RenderClear(renderer));
+        SDL_scc(SDL_SetRenderDrawColor(renderer, PARSE_COLOR(SCREEN_COLOR)));
+        SDL_scc(SDL_RenderClear(renderer));
 
-        render_game(renderer);
+        render_eqin(renderer, font);
 
         SDL_RenderPresent(renderer);
     }
 
+    // destroy_global_objects();
+
+    free(eqin_text.data);
+    eqin_text.data = NULL;
+    SDL_StopTextInput();
+    SDL_DestroyRenderer(renderer);
+    renderer = NULL;
+    TTF_CloseFont(font);
+    font = NULL;
     SDL_DestroyWindow(window);
+    window = NULL;
+
     SDL_Quit();
+    TTF_Quit();
 
     return EXIT_SUCCESS;
 }
