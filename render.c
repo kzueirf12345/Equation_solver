@@ -35,41 +35,28 @@
 // }
 
 SDL_bool is_point_in_rect(SDL_Point *point, SDL_Rect *rect) {
-    return (rect->x <= point->x) && (point->x <= rect->x + rect->w) &&
-           (rect->y <= point->y) && (point->y <= rect->y + rect->h);
+    return (rect->x <= point->x) && (point->x <= rect->x + rect->w) && (rect->y <= point->y) &&
+           (point->y <= rect->y + rect->h);
 }
 
-void blit_eqin_text(TTF_Font* font, int* const text_size) {
+void blit_eqin_text(TTF_Font *font, int *const text_size) {
     if (eqin_text.size) {
-        SDL_Surface* eqin_text_surface = SDL_scp(TTF_RenderText_Blended_Wrapped(
-            font,
-            eqin_text.data,
-            FONT_COLOR,
-            0
-        ));
+        SDL_Surface *eqin_text_surface =
+            SDL_scp(TTF_RenderText_Blended_Wrapped(font, eqin_text.data, FONT_COLOR, 0));
 
         *text_size = eqin_text_surface->w;
 
-        SDL_Rect eqin_text_rect = {
-            0, 
-            0, 
-            MIN(eqin_text_surface->w, BG_EQIN_TEXT_WIDTH),
-            eqin_text_surface->h
-        };
+        SDL_Rect eqin_text_rect = {0, 0, MIN(eqin_text_surface->w, BG_EQIN_TEXT_WIDTH),
+                                   eqin_text_surface->h};
 
-        SDL_Rect bg_eqin_text_rect = {
-            EQIN_TEXT_HORIZONTAL_PADDING,
-            (eqin_surface->h - eqin_text_surface->h - EQIN_SCROLL_HEIGHT - 2*EQIN_SCROLL_VERTICAL_PADDING) / 2,
-            eqin_surface->w,
-            eqin_surface->h
-        };
+        SDL_Rect bg_eqin_text_rect = {EQIN_TEXT_HORIZONTAL_PADDING,
+                                      (eqin_surface->h - eqin_text_surface->h - EQIN_SCROLL_HEIGHT -
+                                       2 * EQIN_SCROLL_VERTICAL_PADDING) /
+                                          2,
+                                      eqin_surface->w, eqin_surface->h};
 
-        SDL_scc(SDL_BlitSurface(
-            eqin_text_surface,
-            &eqin_text_rect,
-            eqin_surface,
-            &bg_eqin_text_rect
-        ));
+        SDL_scc(
+            SDL_BlitSurface(eqin_text_surface, &eqin_text_rect, eqin_surface, &bg_eqin_text_rect));
 
         SDL_FreeSurface(eqin_text_surface);
         eqin_text_surface = NULL;
@@ -77,48 +64,28 @@ void blit_eqin_text(TTF_Font* font, int* const text_size) {
 }
 
 void blit_eqin_scroll(int text_size) {
-    if (text_size > BG_EQIN_TEXT_WIDTH  && text_size) {
-
+    if (text_size > BG_EQIN_TEXT_WIDTH && text_size) {
         eqin_scroll_rect.w = (BG_EQIN_TEXT_WIDTH * BG_EQIN_TEXT_WIDTH) / text_size;
 
-        eqin_scroll_surface = SDL_scp(SDL_CreateRGBSurface(
-            0,
-            bg_eqin_scroll_rect.w,
-            bg_eqin_scroll_rect.h,
-            32,
-            0, 0, 0, 0
-        ));
-        SDL_scc(SDL_FillRect(
-            eqin_scroll_surface,
-            NULL,
-            SDL_ColorToUint32(SCROLL_COLOR, eqin_scroll_surface->format)
-        ));
+        eqin_scroll_surface = SDL_scp(
+            SDL_CreateRGBSurface(0, bg_eqin_scroll_rect.w, bg_eqin_scroll_rect.h, 32, 0, 0, 0, 0));
 
-        
-        SDL_scc(SDL_BlitSurface(
-            eqin_scroll_surface,
-            &eqin_scroll_rect,
-            eqin_surface,
-            &bg_eqin_scroll_rect
-        ));
+        SDL_scc(SDL_FillRect(eqin_scroll_surface, NULL,
+                             SDL_ColorToUint32(SCROLL_COLOR, eqin_scroll_surface->format)));
+
+        SDL_scc(SDL_BlitSurface(eqin_scroll_surface, &eqin_scroll_rect, eqin_surface, &bg_eqin_scroll_rect));
+        //     printf("eqin_scroll_rect: %d, %d, %d, %d\t", eqin_scroll_rect.x, eqin_scroll_rect.y,
+        //            eqin_scroll_rect.w, eqin_scroll_rect.h);
+        //     printf("bg_eqin_scroll_rect: %d, %d, %d, %d\n", bg_eqin_scroll_rect.x,
+        //     bg_eqin_scroll_rect.y,
+        //            bg_eqin_scroll_rect.w, bg_eqin_scroll_rect.h);
     }
 }
 
-
 void render_eqin(SDL_Renderer *renderer, TTF_Font *font) {
-
-    eqin_surface = SDL_scp(SDL_CreateRGBSurface(
-        0,
-        eqin_rect.w,
-        eqin_rect.h,
-        32,
-        0, 0, 0, 0
-    ));
-    SDL_scc(SDL_FillRect(
-        eqin_surface,
-        NULL,
-        SDL_ColorToUint32(BG_EQIN_COLOR, eqin_surface->format)
-    ));
+    eqin_surface = SDL_scp(SDL_CreateRGBSurface(0, eqin_rect.w, eqin_rect.h, 32, 0, 0, 0, 0));
+    SDL_scc(
+        SDL_FillRect(eqin_surface, NULL, SDL_ColorToUint32(BG_EQIN_COLOR, eqin_surface->format)));
 
     int text_size = 0;
     blit_eqin_text(font, &text_size);
