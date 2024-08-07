@@ -46,9 +46,10 @@ void blit_eqin_text(TTF_Font *font, int *const text_size) {
 
         *text_size = eqin_text_surface->w;
 
-        SDL_Rect eqin_text_rect = {offset_eqin_scroll, 0,
-                                   MIN(eqin_text_surface->w, BG_EQIN_TEXT_WIDTH),
-                                   eqin_text_surface->h};
+        SDL_Rect eqin_text_rect = {
+            offset_eqin_scroll *
+                (eqin_scroll_rect.w ? (BG_EQIN_TEXT_WIDTH / eqin_scroll_rect.w) : 0),
+            0, MIN(eqin_text_surface->w, BG_EQIN_TEXT_WIDTH), eqin_text_surface->h};
 
         SDL_Rect bg_eqin_text_rect = {EQIN_TEXT_HORIZONTAL_PADDING,
                                       (eqin_surface->h - eqin_text_surface->h - EQIN_SCROLL_HEIGHT -

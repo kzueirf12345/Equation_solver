@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
                         offset_eqin_scroll += event.motion.xrel;
                         offset_eqin_scroll = MIN(
                             EQIN_WIDTH - 2 * EQIN_SCROLL_HORIZONTAL_PADDING - eqin_scroll_rect.w,
-                            MAX(0, bg_eqin_scroll_rect.x));
+                            MAX(0, offset_eqin_scroll));
                         bg_eqin_scroll_rect.x = EQIN_SCROLL_HORIZONTAL_PADDING + offset_eqin_scroll;
                     }
                     break;
