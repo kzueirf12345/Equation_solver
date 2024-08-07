@@ -1,39 +1,5 @@
 #include "render.h"
 
-// void render_eqin(SDL_Renderer *renderer, TTF_Font *font)
-// {
-//     SDL_Rect eqin_rect = {50, 100, SCREEN_WIDTH - 100, 200};
-//     SDL_Surface *eqin_surface = SDL_scp(SDL_CreateRGBSurface(0, eqin_rect.w,
-//     eqin_rect.h, 32, 0, 0, 0, 0)); SDL_Rect fill_eqin_rect = {0, 0,
-//     eqin_rect.w, eqin_rect.h}; SDL_scc(SDL_FillRect(eqin_surface,
-//     &fill_eqin_rect, SDL_MapRGBA(eqin_surface->format, 255, 255, 255, 0)));
-
-//     if (eqin_text.size)
-//     {
-//         SDL_Surface *eqin_text_surface = TTF_scp(TTF_RenderText_Blended(font,
-//         eqin_text.data, FONT_COLOR));
-//         SDL_scc(SDL_SetSurfaceBlendMode(eqin_text_surface,
-//         SDL_BLENDMODE_BLEND));
-
-//         SDL_Rect eqin_text_rect = {10, 20, eqin_text_surface->w,
-//         eqin_text_surface->h}; SDL_scc(SDL_BlitSurface(eqin_text_surface,
-//         NULL, eqin_surface, &eqin_text_rect));
-
-//         SDL_FreeSurface(eqin_text_surface);
-//         eqin_text_surface = NULL;
-//     }
-
-//     SDL_Texture *eqin_texture =
-//     SDL_scp(SDL_CreateTextureFromSurface(renderer, eqin_surface));
-//     SDL_FreeSurface(eqin_surface);
-//     eqin_surface = NULL;
-
-//     SDL_scc(SDL_RenderCopy(renderer, eqin_texture, NULL, &eqin_rect));
-//     SDL_DestroyTexture(eqin_texture);
-//     eqin_texture = NULL;
-//     return;
-// }
-
 SDL_bool is_point_in_rect(SDL_Point *point, SDL_Rect *rect) {
     return (rect->x <= point->x) && (point->x <= rect->x + rect->w) && (rect->y <= point->y) &&
            (point->y <= rect->y + rect->h);
@@ -47,8 +13,7 @@ void blit_eqin_text(TTF_Font *font, int *const text_size) {
         *text_size = eqin_text_surface->w;
 
         SDL_Rect eqin_text_rect = {
-            offset_eqin_scroll *
-                (eqin_scroll_rect.w ? (BG_EQIN_TEXT_WIDTH / eqin_scroll_rect.w) : 0),
+                (eqin_scroll_rect.w ? (offset_eqin_scroll * BG_EQIN_TEXT_WIDTH / eqin_scroll_rect.w) : offset_eqin_scroll),
             0, MIN(eqin_text_surface->w, BG_EQIN_TEXT_WIDTH), eqin_text_surface->h};
 
         SDL_Rect bg_eqin_text_rect = {EQIN_TEXT_HORIZONTAL_PADDING,
