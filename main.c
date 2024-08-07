@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
         SDL_RenderPresent(renderer);
     }
 
-    destroy_global_objects();
+    // destroy_global_objects();
 
     free(eqin_text.data);
     eqin_text.data = NULL;
