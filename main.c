@@ -56,6 +56,38 @@ int main(int argc, char* argv[]) {
                 }
                 break;
             }
+            case SDL_MOUSEBUTTONDOWN: {
+                if (eqin_scroll_rect.w)
+                {
+                    SDL_Point cursor_pos;
+                    SDL_Rect rect = {
+                        bg_eqin_scroll_rect.x + eqin_scroll_rect.x + EQIN_HORIZONTAL_PADDING,
+                        bg_eqin_scroll_rect.y + EQIN_TOP_PADDING,
+                        eqin_scroll_rect.w,
+                        eqin_scroll_rect.h
+                    };
+                    SDL_GetMouseState(&cursor_pos.x, &cursor_pos.y);
+                    if (is_point_in_rect(&cursor_pos, &rect)) {
+                        is_movable_eqin_scroll = SDL_TRUE;
+                        // printf("down\n");
+                    }
+                }
+                break;
+            }
+            case SDL_MOUSEBUTTONUP: {
+                is_movable_eqin_scroll = SDL_FALSE;
+                // printf("up\n");
+                break;
+            }
+            case SDL_MOUSEMOTION: {
+                if (is_movable_eqin_scroll)
+                {
+                    eqin_scroll_rect.x += event.motion.xrel;
+                    eqin_scroll_rect.x = MIN(EQIN_WIDTH - 2*EQIN_SCROLL_HORIZONTAL_PADDING- eqin_scroll_rect.w,
+                                         MAX(0, eqin_scroll_rect.x));
+                }
+                break;
+            }
             }
         }
 

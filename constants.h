@@ -40,3 +40,8 @@ extern SDL_Surface* eqin_surface;
 extern SDL_Rect bg_eqin_scroll_rect;
 extern SDL_Surface* eqin_scroll_surface;
 
+
+
+extern SDL_bool is_movable_eqin_scroll;
+extern SDL_Rect eqin_scroll_rect;
+

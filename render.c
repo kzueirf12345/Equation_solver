@@ -79,6 +79,8 @@ void blit_eqin_text(TTF_Font* font, int* const text_size) {
 void blit_eqin_scroll(int text_size) {
     if (text_size > BG_EQIN_TEXT_WIDTH  && text_size) {
 
+        eqin_scroll_rect.w = (BG_EQIN_TEXT_WIDTH * BG_EQIN_TEXT_WIDTH) / text_size;
+
         eqin_scroll_surface = SDL_scp(SDL_CreateRGBSurface(
             0,
             bg_eqin_scroll_rect.w,
@@ -92,12 +94,6 @@ void blit_eqin_scroll(int text_size) {
             SDL_ColorToUint32(SCROLL_COLOR, eqin_scroll_surface->format)
         ));
 
-        SDL_Rect eqin_scroll_rect = {
-            0, //offset
-            0,
-            (BG_EQIN_TEXT_WIDTH * BG_EQIN_TEXT_WIDTH) / text_size,
-            EQIN_SCROLL_HEIGHT, 
-        };
         
         SDL_scc(SDL_BlitSurface(
             eqin_scroll_surface,
