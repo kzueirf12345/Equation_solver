@@ -75,30 +75,38 @@ void pop_back(List* list) {
     free(del);
 }
 
+void erase(List* list, Node* prev_erase) {
+    assert(!(prev_erase == list->right || list->size < 2 || prev_erase == NULL) && "Invalid erase");
+    
+    Node* erase = prev_erase->next;
+    prev_erase->next = erase->next;
+    free(erase);
+    --list->size;
+    if (prev_erase->next == NULL)
+    {
+        list->right = prev_erase;
+    }
+}
+
 List merge_msort(List* const llist, List* const rlist) {
     List list = create_List(NULL, NULL, 0);
     Node *itl = llist->left, *itr = rlist->left;
-    size_t cntl = 0, cntr = 0;
-    for (; cntl < llist->size && cntr < rlist->size;) {
+    for (; itl != llist->right->next && itr != rlist->right->next;) {
         if (itl->data.power >= itr->data.power) {
             push_back(&list, itl->data);
             itl = itl->next;
-            ++cntl;
         } else {
             push_back(&list, itr->data);
             itr = itr->next;
-            ++cntr;
         }
     }
-    while (cntl < llist->size) {
+    while (itl != llist->right->next) {
         push_back(&list, itl->data);
         itl = itl->next;
-        ++cntl;
     }
-    while (cntr < rlist->size) {
+    while (itr != rlist->right->next) {
         push_back(&list, itr->data);
         itr = itr->next;
-        ++cntr;
     }
     return list;
 }
@@ -122,4 +130,95 @@ List msort(List* const list) {
     left = msort(&left);
     right = msort(&right);
     return merge_msort(&left, &right);
+}
+
+void reduct_sorted_eq(List* eq) {
+    SDL_bool do_increment = SDL_TRUE;
+    for (Node *prepreprev = NULL, *preprev = NULL, *prev = eq->left; prev->next != NULL;) {
+        Node* cur = prev->next;
+
+        if (prev->data.power == cur->data.power) {
+            prev->data.coef += cur->data.coef;
+            erase(eq, prev);
+
+            if (prev->data.coef == 0) {
+                if (preprev == NULL) {
+                    pop_front(eq);
+                } else {
+                    erase(eq, preprev);
+                }
+                prev = preprev;
+                preprev = prepreprev;
+            }
+            do_increment = SDL_FALSE;
+        }
+        if (do_increment) {
+            prepreprev = preprev;
+            preprev = prev;
+            prev = prev->next;
+        } else {
+            do_increment = SDL_TRUE;
+        }
+    }
+}
+
+void print_eq(List* eq, const char* const hi_message) {
+    printf("%s: ", hi_message);
+    for (Node* it = eq->left; it != eq->right->next; it = it->next) {
+        if (it->data.power == 0) {
+            if (it->data.coef > 0) {
+                if (it->data.coef == 1) {
+                    if (it == eq->left) {
+                    } else {
+                        printf("+ 1 ");
+                    }
+                } else {
+                    if (it == eq->left) {
+                        printf("%d ", it->data.coef);
+                    } else {
+                        printf("+ %d ", it->data.coef);
+                    }
+                }
+            } else {
+                printf("%d ", it->data.coef);
+            }
+        } else if (it->data.power == 1) {
+            if (it->data.coef > 0) {
+                if (it->data.coef == 1) {
+                    if (it == eq->left) {
+                        printf("x ");
+                    } else {
+                        printf("+ x ");
+                    }
+                } else {
+                    if (it == eq->left) {
+                        printf("%dx ", it->data.coef);
+                    } else {
+                        printf("+ %dx ", it->data.coef);
+                    }
+                }
+            } else {
+                printf("%dx ", it->data.coef);
+            }
+        } else {
+            if (it->data.coef > 0) {
+                if (it->data.coef == 1) {
+                    if (it == eq->left) {
+                        printf("x^%d ", it->data.power);
+                    } else {
+                        printf("+ x^%d ", it->data.power);
+                    }
+                } else {
+                    if (it == eq->left) {
+                        printf("%dx^%d ", it->data.coef, it->data.power);
+                    } else {
+                        printf("+ %dx^%d ", it->data.coef, it->data.power);
+                    }
+                }
+            } else {
+                printf("%dx^%d ", it->data.coef, it->data.power);
+            }
+        }
+    }
+    printf("\n");
 }
