@@ -9,12 +9,30 @@ void destroy_global_objects(void) {
 }
 
 int main(int argc, char* argv[]) {
+
+    // CHECK MSORT //
+    // List list = create_List(NULL, NULL, 0);
+    // printf("old list: \t");
+    // for (size_t i = 1; i <= 150; ++i)
+    // {
+    //     const int num = -rand()%1000;
+    //     push_back(&list, create_Data(0, num));
+    //     printf("%d ", num);
+    // }
+    // list = msort(&list);
+    // printf("\nnew list: \t");
+    // for (Node* it = list.left; it != NULL; it = it->next)
+    // {
+    //     printf("%d ", it->data.power);
+    // }
+    // printf("\n");
+
     SDL_scc(SDL_Init(SDL_INIT_EVERYTHING));
     TTF_scc(TTF_Init());
 
     SDL_Window* window = SDL_scp(SDL_CreateWindow(
         "Equations solver", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
-        SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_FOCUS));
+        SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_FOCUS));
 
     SDL_Renderer* renderer = SDL_scp(SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED));
     SDL_scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -81,7 +99,7 @@ int main(int argc, char* argv[]) {
         SDL_scc(SDL_SetRenderDrawColor(renderer, PARSE_COLOR(SCREEN_COLOR)));
         SDL_scc(SDL_RenderClear(renderer));
 
-        render_eqin(renderer, font);
+        // render_eqin(renderer, font);
 
         SDL_RenderPresent(renderer);
     }
