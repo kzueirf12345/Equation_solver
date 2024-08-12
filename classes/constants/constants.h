@@ -3,8 +3,8 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
-#include "errors.h"
-#include "my_string.h"
+#include "../errors/errors.h"
+#include "../my_string/my_string.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600

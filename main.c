@@ -1,5 +1,5 @@
-#include "list.h"
-#include "render.h"
+#include "classes/list/list.h"
+#include "classes/render/render.h"
 
 int main(int argc, char* argv[]) {
     // // CHECK ONE

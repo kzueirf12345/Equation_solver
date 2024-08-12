@@ -3,9 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "constants.h"
-#include "errors.h"
-#include "my_string.h"
+#include "../constants/constants.h"
 
 SDL_bool is_point_in_rect(SDL_Point* point, SDL_Rect* rect);
 
