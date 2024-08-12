@@ -21,5 +21,4 @@ SDL_Surface* eqin_scroll_surface = NULL;
 
 int offset_eqin_scroll = 0;
 SDL_bool is_movable_eqin_scroll = SDL_FALSE;
-SDL_Rect eqin_scroll_rect = {0,  // offset
-                             0, 0, EQIN_SCROLL_HEIGHT};
+SDL_Rect eqin_scroll_rect = {0, 0, 0, EQIN_SCROLL_HEIGHT};
