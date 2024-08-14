@@ -1,4 +1,4 @@
-#include "classes/list/list.h"
+#include "classes/polynom/polynom.h"
 #include "classes/render/render.h"
 
 int main(int argc, char* argv[]) {
@@ -16,12 +16,12 @@ int main(int argc, char* argv[]) {
     // push_back(&list, create_Data(1337, 1));
     // push_back(&list, create_Data(52, 0));
     // push_back(&list, create_Data(52, 0));
-    // print_eq(&list, "base list");
+    // print_polynom(&list, "base list");
     // list = msort(&list);
-    // print_eq(&list, "sorted list");
-    // reduct_sorted_eq(&list);
-    // print_eq(&list, "reducted list");
-    
+    // print_polynom(&list, "sorted list");
+    // reduct_sorted_polynom(&list);
+    // print_polynom(&list, "reducted list");
+
     // //CHECK TWO
     // printf("old list: \t");
     // for (size_t i = 1; i <= 25; ++i)
@@ -51,6 +51,7 @@ int main(int argc, char* argv[]) {
     TTF_Font* font = TTF_scp(TTF_OpenFont("../Montserrat.ttf", 30));
 
     SDL_StartTextInput();
+    eqin_text = create_string(NULL, 0);
 
     SDL_bool quit = SDL_FALSE;
     while (!quit) {
@@ -64,43 +65,36 @@ int main(int argc, char* argv[]) {
                 case SDL_TEXTINPUT: {
                     const char* syms = event.text.text;
                     if (is_good_syms(syms)) {
-                        string_realloc(&eqin_text, 1);
-                        strcat(eqin_text.data, syms);
+                        spush_back_char(&eqin_text, syms[0]);
                     }
                     break;
                 }
                 case SDL_KEYDOWN: {
                     if (event.key.keysym.sym == SDLK_BACKSPACE && eqin_text.size) {
-                        eqin_text.data[--eqin_text.size] = '\0';
+                        spop_back(&eqin_text);
                     }
                     break;
                 }
                 case SDL_MOUSEBUTTONDOWN: {
-                    if (eqin_scroll_rect.w) {
+                    if (eqin_scroll_rect.w < BG_EQIN_SCROLL_WIDTH) {
                         SDL_Point cursor_pos;
-                        SDL_Rect rect = {bg_eqin_scroll_rect.x + EQIN_HORIZONTAL_PADDING,
-                                         bg_eqin_scroll_rect.y + EQIN_TOP_PADDING,
+                        SDL_Rect rect = {eqin_scroll_rect.x + EQIN_HORIZONTAL_PADDING,
+                                         eqin_scroll_rect.y + EQIN_TOP_PADDING,
                                          eqin_scroll_rect.w, eqin_scroll_rect.h};
                         SDL_scc(SDL_GetMouseState(&cursor_pos.x, &cursor_pos.y));
                         if (is_point_in_rect(&cursor_pos, &rect)) {
                             is_movable_eqin_scroll = SDL_TRUE;
-                            // printf("down\n");
                         }
                     }
                     break;
                 }
                 case SDL_MOUSEBUTTONUP: {
                     is_movable_eqin_scroll = SDL_FALSE;
-                    // printf("up\n");
                     break;
                 }
                 case SDL_MOUSEMOTION: {
                     if (is_movable_eqin_scroll) {
                         offset_eqin_scroll += event.motion.xrel;
-                        offset_eqin_scroll = MIN(
-                            EQIN_WIDTH - 2 * EQIN_SCROLL_HORIZONTAL_PADDING - eqin_scroll_rect.w,
-                            MAX(0, offset_eqin_scroll));
-                        bg_eqin_scroll_rect.x = EQIN_SCROLL_HORIZONTAL_PADDING + offset_eqin_scroll;
                     }
                     break;
                 }

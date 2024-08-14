@@ -4,9 +4,12 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <malloc.h>
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+void *recalloc(void *dest, size_t old_size, size_t new_size);
 
 typedef struct string {
     char *data;
@@ -14,8 +17,14 @@ typedef struct string {
     size_t size;
 } string;
 
-void string_realloc(string *str, size_t add_size);
-void string_swap(char **str1_ptr, char **str2_ptr);
+string create_string(const char* const data, size_t size);
+void srealloc(string *str, size_t add_size);
+void sswap(char **str1_ptr, char **str2_ptr);
+
+void spush_back_str(string *dest, string* source);
+void spush_back_char(string *dest, char chr);
+char sback(string* const str);
+char spop_back(string* str);
 
 SDL_bool is_good_sym(char sym);
 SDL_bool is_good_syms(const char *syms);

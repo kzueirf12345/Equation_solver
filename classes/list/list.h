@@ -36,6 +36,3 @@ void erase(List* list, Node* prev_erase);
 
 List merge_msort(List* const llist, List* const rlist);
 List msort(List* const list);
-
-void reduct_sorted_eq(List* eq);
-void print_eq(List* eq, const char * const hi_message);
