@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
+// #include <malloc.h> long time deprecated. everything is in stdlib.h now
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
