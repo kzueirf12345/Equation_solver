@@ -17,6 +17,7 @@ add_executable(mygame main.c
     classes/render/render.c
     classes/constants/constants.c
     classes/polynom/polynom.c
+    classes/stack/stack.c
 )
 if (APPLE)
     target_link_libraries(mygame PRIVATE ${SDL2_LIBRARIES} SDL2_ttf::SDL2_ttf)
