@@ -1,7 +1,15 @@
 #include "classes/polynom/polynom.h"
 #include "classes/render/render.h"
 
-int main(int argc, char* argv[]) {
+#define DEBUG
+
+#ifdef DEBUG
+#include "classes/my_string/my_string.h"
+#endif
+
+int main(int argc, char* argv[])
+{
+#ifdef DEBUG
     // // CHECK ONE
     // List list = create_List(NULL, NULL, 0);
     // push_back(&list, create_Data(1, 6));
@@ -38,12 +46,20 @@ int main(int argc, char* argv[]) {
     // }
     // printf("\n");
 
+    // token = 9x
+    // token -> node
+    // node -> list
+    // 9x 8x 4 - 6x 2 + * +
+    string tmp = screate("9x+(8x-4)*(6x+2)", 16);
+    printf("%s\n", pol_nat(&tmp).data);
+
+#else
     SDL_scc(SDL_Init(SDL_INIT_EVERYTHING));
     TTF_scc(TTF_Init());
 
     SDL_Window* window = SDL_scp(
         SDL_CreateWindow("Equations solver", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                         SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_FOCUS));
+            SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_MOUSE_FOCUS));
 
     SDL_Renderer* renderer = SDL_scp(SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED));
     SDL_scc(SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -58,46 +74,46 @@ int main(int argc, char* argv[]) {
         SDL_Event event;
         if (SDL_PollEvent(&event)) {
             switch (event.type) {
-                case SDL_QUIT: {
-                    quit = SDL_TRUE;
-                    break;
+            case SDL_QUIT: {
+                quit = SDL_TRUE;
+                break;
+            }
+            case SDL_TEXTINPUT: {
+                const char* syms = event.text.text;
+                if (is_good_syms(syms)) {
+                    spush_back_char(&eqin_text, syms[0]);
                 }
-                case SDL_TEXTINPUT: {
-                    const char* syms = event.text.text;
-                    if (is_good_syms(syms)) {
-                        spush_back_char(&eqin_text, syms[0]);
+                break;
+            }
+            case SDL_KEYDOWN: {
+                if (event.key.keysym.sym == SDLK_BACKSPACE && eqin_text.size) {
+                    spop_back(&eqin_text);
+                }
+                break;
+            }
+            case SDL_MOUSEBUTTONDOWN: {
+                if (eqin_scroll_rect.w < BG_EQIN_SCROLL_WIDTH) {
+                    SDL_Point cursor_pos;
+                    SDL_Rect rect = { eqin_scroll_rect.x + EQIN_HORIZONTAL_PADDING,
+                        eqin_scroll_rect.y + EQIN_TOP_PADDING,
+                        eqin_scroll_rect.w, eqin_scroll_rect.h };
+                    SDL_scc(SDL_GetMouseState(&cursor_pos.x, &cursor_pos.y));
+                    if (is_point_in_rect(&cursor_pos, &rect)) {
+                        is_movable_eqin_scroll = SDL_TRUE;
                     }
-                    break;
                 }
-                case SDL_KEYDOWN: {
-                    if (event.key.keysym.sym == SDLK_BACKSPACE && eqin_text.size) {
-                        spop_back(&eqin_text);
-                    }
-                    break;
+                break;
+            }
+            case SDL_MOUSEBUTTONUP: {
+                is_movable_eqin_scroll = SDL_FALSE;
+                break;
+            }
+            case SDL_MOUSEMOTION: {
+                if (is_movable_eqin_scroll) {
+                    offset_eqin_scroll += event.motion.xrel;
                 }
-                case SDL_MOUSEBUTTONDOWN: {
-                    if (eqin_scroll_rect.w < BG_EQIN_SCROLL_WIDTH) {
-                        SDL_Point cursor_pos;
-                        SDL_Rect rect = {eqin_scroll_rect.x + EQIN_HORIZONTAL_PADDING,
-                                         eqin_scroll_rect.y + EQIN_TOP_PADDING,
-                                         eqin_scroll_rect.w, eqin_scroll_rect.h};
-                        SDL_scc(SDL_GetMouseState(&cursor_pos.x, &cursor_pos.y));
-                        if (is_point_in_rect(&cursor_pos, &rect)) {
-                            is_movable_eqin_scroll = SDL_TRUE;
-                        }
-                    }
-                    break;
-                }
-                case SDL_MOUSEBUTTONUP: {
-                    is_movable_eqin_scroll = SDL_FALSE;
-                    break;
-                }
-                case SDL_MOUSEMOTION: {
-                    if (is_movable_eqin_scroll) {
-                        offset_eqin_scroll += event.motion.xrel;
-                    }
-                    break;
-                }
+                break;
+            }
             }
         }
 
@@ -123,4 +139,6 @@ int main(int argc, char* argv[]) {
     TTF_Quit();
 
     return EXIT_SUCCESS;
+
+#endif
 }

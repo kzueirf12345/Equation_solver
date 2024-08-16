@@ -9,22 +9,26 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-void *recalloc(void *dest, size_t old_size, size_t new_size);
+void* recalloc(void* dest, size_t old_size, size_t new_size);
 
 typedef struct string {
-    char *data;
+    char* data;
     size_t capacity;
     size_t size;
 } string;
 
-string create_string(const char* const data, size_t size);
-void srealloc(string *str, size_t add_size);
-void sswap(char **str1_ptr, char **str2_ptr);
+string screate(const char* const data, size_t size);
+void scopy(string* const dest, const string* const str);
+void srealloc(string* str, size_t add_size);
+void sswap(char** str1_ptr, char** str2_ptr);
 
-void spush_back_str(string *dest, string* source);
-void spush_back_char(string *dest, char chr);
-char sback(string* const str);
-char spop_back(string* str);
+void spush_back_str(string* dest, string* source);
+void spush_back_char(string* dest, char chr);
+char sback(const string* const str);
+char spop_back(string* const str);
+int stoi(const string* const str);
+string sctos(const char sym); // char to string
+void sclear(string* const str);
 
 SDL_bool is_good_sym(char sym);
-SDL_bool is_good_syms(const char *syms);
+SDL_bool is_good_syms(const char* syms);
