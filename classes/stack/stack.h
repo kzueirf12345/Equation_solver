@@ -25,3 +25,5 @@ void* Stack_back(Stack* stack);
 void Stack_pop(Stack* stack);
 
 void Stack_print(Stack* stack);
+
+void Stack_clear(Stack* stack, const int capacity);

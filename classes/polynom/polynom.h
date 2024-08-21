@@ -4,6 +4,6 @@
 #include "../my_string/my_string.h"
 #include <SDL_stdinc.h>
 
-const string pol_nat(const string* equation);
+const List pol_nat_upd(const String* equation);
 void reduct_sorted_polynom(List* polynom);
 void print_polynom(List* polynom, const char* const hi_message);

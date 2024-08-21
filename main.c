@@ -1,3 +1,4 @@
+#include "classes/my_string/my_string.h"
 #include "classes/polynom/polynom.h"
 #include "classes/render/render.h"
 #include "classes/stack/stack.h"
@@ -42,13 +43,13 @@ int main(int argc, char* argv[]) {
     // }
     // printf("\n");
 
-    // //CHECK THREE
-    // token = 9x
-    // token -> node
-    // node -> list
-    // 9x 8x 4 - 6x 2 + * +
-    // string tmp = screate("9x+(8x-4)*(6x+2)", 16);
-    // printf("%s\n", pol_nat(&tmp).data);
+    //CHECK THREE
+    // 9x+(8x-4)*(6x+2)
+    String tmp = String_create("9x+(8x-4)*(6x+2)", 1);
+    List res = pol_nat_upd(&tmp);
+    for (Node *ptr = res.left; ptr != res.right; ptr=ptr->next) {
+        printf("%dx^%d ", ptr->data.coef, ptr->data.power);
+    }
 
     // // CHECK FOUR
     // Stack stack = Stack_create(sizeof(int), 5);

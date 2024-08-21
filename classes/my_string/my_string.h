@@ -11,24 +11,21 @@
 
 void* recalloc(void* dest, size_t old_size, size_t new_size);
 
-typedef struct string {
+typedef struct String {
     char* data;
     size_t capacity;
     size_t size;
-} string;
+} String;
 
-string screate(const char* const data, size_t size);
-void scopy(string* const dest, const string* const str);
-void srealloc(string* str, size_t add_size);
-void sswap(char** str1_ptr, char** str2_ptr);
+String String_create(const char* const data, size_t size);
+void String_copy(String* const dest, const String* const str);
+void String_realloc(String* str, size_t add_size);
+void String_swap(char** str1_ptr, char** str2_ptr);
 
-void spush_back_str(string* dest, string* source);
-void spush_back_char(string* dest, char chr);
-char sback(const string* const str);
-char spop_back(string* const str);
-int stoi(const string* const str);
-string sctos(const char sym); // char to string
-void sclear(string* const str);
-
-SDL_bool is_good_sym(char sym);
-SDL_bool is_good_syms(const char* syms);
+void String_push_back_str(String* dest, String* source);
+void String_push_back_char(String* dest, char chr);
+char String_back(const String* const str);
+char String_pop_back(String* const str);
+int String_to_int(const String* const str);
+String String_char_to_string(const char sym); // char to String
+void String_clear(String* const str);

@@ -32,7 +32,7 @@ extern const SDL_Color BG_EQIN_COLOR;
 extern const SDL_Color FONT_COLOR;
 extern const SDL_Color SCROLL_COLOR;
 
-extern string eqin_text;
+extern String eqin_text;
 extern const SDL_Rect eqin_rect;
 extern SDL_Surface* eqin_surface;
 
