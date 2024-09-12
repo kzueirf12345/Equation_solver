@@ -3,7 +3,7 @@
 #include "classes/render/render.h"
 #include "classes/stack/stack.h"
 
-#define DEBUG
+// #define DEBUG
 
 int main(int argc, char* argv[]) {
 #ifdef DEBUG
@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
     TTF_Font* font = TTF_scp(TTF_OpenFont("../Montserrat.ttf", 30));
 
     SDL_StartTextInput();
-    eqin_text = screate(NULL, 0);
+    eqin_text = String_create(NULL, 0);
 
     SDL_bool quit = SDL_FALSE;
     while (!quit) {
@@ -106,13 +106,13 @@ int main(int argc, char* argv[]) {
                 case SDL_TEXTINPUT: {
                     const char* syms = event.text.text;
                     if (is_good_syms(syms)) {
-                        spush_back_char(&eqin_text, syms[0]);
+                        String_push_back_char(&eqin_text, syms[0]);
                     }
                     break;
                 }
                 case SDL_KEYDOWN: {
                     if (event.key.keysym.sym == SDLK_BACKSPACE && eqin_text.size) {
-                        spop_back(&eqin_text);
+                        String_pop_back(&eqin_text);
                     }
                     break;
                 }

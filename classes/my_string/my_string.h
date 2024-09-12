@@ -29,3 +29,5 @@ char String_pop_back(String* const str);
 int String_to_int(const String* const str);
 String String_char_to_string(const char sym); // char to String
 void String_clear(String* const str);
+
+SDL_bool is_good_syms(const char* syms);
